@@ -1,0 +1,878 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Digital ID Card Generator</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
+
+    <style>
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: "Poppins", Arial, sans-serif;
+            background: linear-gradient(135deg, #eef2ff, #f8fafc);
+            color: #1e293b;
+            min-height: 100vh;
+        }
+
+        /* HEADER */
+
+        .header {
+            background: linear-gradient(135deg, #1e3a8a, #2563eb, #4f46e5);
+            color: white;
+            text-align: center;
+            padding: 30px 20px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        .header h1 {
+            font-size: 34px;
+            margin-bottom: 5px;
+        }
+
+        .header p {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+
+        /* MAIN */
+
+        .container {
+            width: 92%;
+            max-width: 1200px;
+            margin: 40px auto;
+        }
+
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 35px;
+            align-items: start;
+        }
+
+        /* SECTIONS */
+
+        .form-section,
+        .preview-section {
+            background: white;
+            padding: 30px;
+            border-radius: 18px;
+            box-shadow: 0 10px 35px rgba(15, 23, 42, 0.12);
+            border: 1px solid #e2e8f0;
+        }
+
+        .section-title {
+            margin-bottom: 25px;
+        }
+
+        .section-title h2 {
+            color: #1e3a8a;
+            font-size: 22px;
+            margin-bottom: 5px;
+        }
+
+        .section-title p {
+            color: #64748b;
+            font-size: 13px;
+        }
+
+        /* FORM */
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 13px;
+            font-weight: 600;
+            margin-bottom: 6px;
+            color: #334155;
+        }
+
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            height: 43px;
+            padding: 0 12px;
+            border: 1px solid #cbd5e1;
+            border-radius: 8px;
+            background: #f8fafc;
+            font-family: inherit;
+            font-size: 13px;
+            outline: none;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            border-color: #2563eb;
+            background: white;
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
+        }
+
+        .form-group input[type="file"] {
+            padding-top: 9px;
+            background: white;
+        }
+
+        /* BUTTON */
+
+        .generate-btn {
+            width: 100%;
+            height: 48px;
+            margin-top: 8px;
+            border: none;
+            border-radius: 9px;
+            background: linear-gradient(135deg, #2563eb, #4f46e5);
+            color: white;
+            font-family: inherit;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .generate-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(37, 99, 235, 0.3);
+        }
+
+        /* ID CARD */
+
+        .id-card {
+            width: 360px;
+            max-width: 100%;
+            margin: 10px auto 25px;
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            border: 1px solid #dbeafe;
+            box-shadow: 0 15px 40px rgba(30, 58, 138, 0.20);
+        }
+
+        /* CARD HEADER */
+
+        .card-header {
+            padding: 20px 15px;
+            min-height: 105px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            text-align: center;
+            background: linear-gradient(135deg, #1e3a8a, #2563eb, #4f46e5);
+            color: white;
+        }
+
+        .college-icon {
+            width: 48px;
+            height: 48px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 12px;
+            font-size: 24px;
+        }
+
+        .card-header h2 {
+            color: white;
+            font-size: 18px;
+            margin-bottom: 4px;
+            word-break: break-word;
+        }
+
+        .card-header p {
+            font-size: 10px;
+            letter-spacing: 2px;
+        }
+
+        /* PHOTO */
+
+        .photo-area {
+            display: flex;
+            justify-content: center;
+            margin: 22px 0 12px;
+        }
+
+        .photo-area img {
+            width: 125px;
+            height: 125px;
+            object-fit: cover;
+            border-radius: 50%;
+            border: 5px solid #2563eb;
+            background: #e2e8f0;
+            box-shadow: 0 6px 18px rgba(37, 99, 235, 0.25);
+        }
+
+        /* NAME */
+
+        #cardName {
+            text-align: center;
+            font-size: 21px;
+            color: #1e3a8a;
+            margin-bottom: 18px;
+        }
+
+        /* DETAILS */
+
+        .card-details {
+            padding: 0 28px 20px;
+        }
+
+        .detail-row {
+            display: flex;
+            justify-content: space-between;
+            gap: 15px;
+            padding: 9px 0;
+            border-bottom: 1px solid #eef2f7;
+            font-size: 12px;
+        }
+
+        .detail-row span {
+            color: #64748b;
+        }
+
+        .detail-row strong {
+            color: #1e293b;
+            text-align: right;
+            max-width: 62%;
+            word-break: break-word;
+        }
+
+        /* FOOTER */
+
+        .card-footer {
+            display: flex;
+            justify-content: space-between;
+            padding: 13px 20px;
+            background: #f1f5f9;
+            border-top: 1px solid #e2e8f0;
+            color: #2563eb;
+            font-size: 11px;
+            font-weight: 600;
+        }
+
+        /* RESET */
+
+        .reset-btn {
+            display: block;
+            width: 120px;
+            height: 40px;
+            margin: auto;
+            border: 1px solid #cbd5e1;
+            border-radius: 8px;
+            background: white;
+            color: #475569;
+            font-family: inherit;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .reset-btn:hover {
+            background: #f1f5f9;
+        }
+
+        /* FOOTER */
+
+        footer {
+            text-align: center;
+            padding: 25px;
+            color: #64748b;
+            font-size: 13px;
+        }
+
+        /* MOBILE */
+
+        @media (max-width: 900px) {
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 500px) {
+
+            .header h1 {
+                font-size: 26px;
+            }
+
+            .container {
+                width: 94%;
+                margin: 25px auto;
+            }
+
+            .form-section,
+            .preview-section {
+                padding: 20px;
+            }
+
+            .id-card {
+                width: 100%;
+            }
+        }
+
+    </style>
+</head>
+
+
+<body>
+
+    <!-- HEADER -->
+
+    <header class="header">
+
+        <h1>Digital ID Card Generator</h1>
+
+        <p>Create your professional college ID card</p>
+
+    </header>
+
+
+    <!-- MAIN -->
+
+    <main class="container">
+
+        <div class="main-content">
+
+
+            <!-- FORM -->
+
+            <section class="form-section">
+
+                <div class="section-title">
+
+                    <h2>Student Details</h2>
+
+                    <p>Enter your information below</p>
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label>Student Name</label>
+
+                    <input
+                        type="text"
+                        id="name"
+                        placeholder="Enter student name">
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label>Roll Number</label>
+
+                    <input
+                        type="text"
+                        id="roll"
+                        placeholder="Enter roll number">
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label>Course</label>
+
+                    <input
+                        type="text"
+                        id="course"
+                        placeholder="Example: B.Tech">
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label>Department</label>
+
+                    <input
+                        type="text"
+                        id="department"
+                        placeholder="Example: CSE">
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label>Year</label>
+
+                    <select id="year">
+
+                        <option value="">
+                            Select Year
+                        </option>
+
+                        <option>1st Year</option>
+                        <option>2nd Year</option>
+                        <option>3rd Year</option>
+                        <option>4th Year</option>
+
+                    </select>
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label>College Name</label>
+
+                    <input
+                        type="text"
+                        id="college"
+                        placeholder="Enter college name">
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label>Email</label>
+
+                    <input
+                        type="email"
+                        id="email"
+                        placeholder="student@gmail.com">
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label>Phone Number</label>
+
+                    <input
+                        type="tel"
+                        id="phone"
+                        placeholder="9876543210">
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label>Blood Group</label>
+
+                    <select id="blood">
+
+                        <option value="">
+                            Select Blood Group
+                        </option>
+
+                        <option>A+</option>
+                        <option>A-</option>
+                        <option>B+</option>
+                        <option>B-</option>
+                        <option>O+</option>
+                        <option>O-</option>
+                        <option>AB+</option>
+                        <option>AB-</option>
+
+                    </select>
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label>Profile Photo</label>
+
+                    <input
+                        type="file"
+                        id="photo"
+                        accept="image/*">
+
+                </div>
+
+
+                <!-- IMPORTANT: type button -->
+                <button
+                    type="button"
+                    class="generate-btn"
+                    onclick="generateCard()">
+
+                    Generate ID Card
+
+                </button>
+
+            </section>
+
+
+
+            <!-- PREVIEW -->
+
+            <section class="preview-section">
+
+                <div class="section-title">
+
+                    <h2>ID Card Preview</h2>
+
+                    <p>Your digital ID card</p>
+
+                </div>
+
+
+                <!-- ID CARD -->
+
+                <div class="id-card">
+
+
+                    <!-- CARD HEADER -->
+
+                    <div class="card-header">
+
+                        <div class="college-icon">
+                            🎓
+                        </div>
+
+                        <div>
+
+                            <h2 id="cardCollege">
+                                YOUR COLLEGE NAME
+                            </h2>
+
+                            <p>
+                                STUDENT ID CARD
+                            </p>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- PHOTO -->
+
+                    <div class="photo-area">
+
+                        <img
+                            id="cardPhoto"
+                            alt="Student Photo">
+
+                    </div>
+
+
+                    <!-- NAME -->
+
+                    <h3 id="cardName">
+                        Student Name
+                    </h3>
+
+
+                    <!-- DETAILS -->
+
+                    <div class="card-details">
+
+
+                        <div class="detail-row">
+
+                            <span>Roll Number</span>
+
+                            <strong id="cardRoll">
+                                ---
+                            </strong>
+
+                        </div>
+
+
+                        <div class="detail-row">
+
+                            <span>Course</span>
+
+                            <strong id="cardCourse">
+                                ---
+                            </strong>
+
+                        </div>
+
+
+                        <div class="detail-row">
+
+                            <span>Department</span>
+
+                            <strong id="cardDepartment">
+                                ---
+                            </strong>
+
+                        </div>
+
+
+                        <div class="detail-row">
+
+                            <span>Year</span>
+
+                            <strong id="cardYear">
+                                ---
+                            </strong>
+
+                        </div>
+
+
+                        <div class="detail-row">
+
+                            <span>Email</span>
+
+                            <strong id="cardEmail">
+                                ---
+                            </strong>
+
+                        </div>
+
+
+                        <div class="detail-row">
+
+                            <span>Phone</span>
+
+                            <strong id="cardPhone">
+                                ---
+                            </strong>
+
+                        </div>
+
+
+                        <div class="detail-row">
+
+                            <span>Blood Group</span>
+
+                            <strong id="cardBlood">
+                                ---
+                            </strong>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- CARD FOOTER -->
+
+                    <div class="card-footer">
+
+                        <span>
+                            ✓ Valid Student ID
+                        </span>
+
+                        <span>
+                            2026
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <!-- RESET -->
+
+                <button
+                    type="button"
+                    class="reset-btn"
+                    onclick="resetCard()">
+
+                    Reset
+
+                </button>
+
+            </section>
+
+        </div>
+
+    </main>
+
+
+    <footer>
+        © 2026 Digital ID Card Generator
+    </footer>
+
+
+
+    <!-- JAVASCRIPT -->
+
+    <script>
+
+        function generateCard() {
+
+            // Get values
+
+            let name =
+                document.getElementById("name").value.trim();
+
+            let roll =
+                document.getElementById("roll").value.trim();
+
+            let course =
+                document.getElementById("course").value.trim();
+
+            let department =
+                document.getElementById("department").value.trim();
+
+            let year =
+                document.getElementById("year").value;
+
+            let college =
+                document.getElementById("college").value.trim();
+
+            let email =
+                document.getElementById("email").value.trim();
+
+            let phone =
+                document.getElementById("phone").value.trim();
+
+            let blood =
+                document.getElementById("blood").value;
+
+
+            // Check fields
+
+            if (
+                name === "" ||
+                roll === "" ||
+                course === "" ||
+                department === "" ||
+                year === "" ||
+                college === "" ||
+                email === "" ||
+                phone === "" ||
+                blood === ""
+            ) {
+
+                alert("Please fill all student details.");
+
+                return;
+            }
+
+
+            // Update ID card
+
+            document.getElementById("cardName").textContent =
+                name;
+
+            document.getElementById("cardRoll").textContent =
+                roll;
+
+            document.getElementById("cardCourse").textContent =
+                course;
+
+            document.getElementById("cardDepartment").textContent =
+                department;
+
+            document.getElementById("cardYear").textContent =
+                year;
+
+            document.getElementById("cardCollege").textContent =
+                college;
+
+            document.getElementById("cardEmail").textContent =
+                email;
+
+            document.getElementById("cardPhone").textContent =
+                phone;
+
+            document.getElementById("cardBlood").textContent =
+                blood;
+
+
+            // Photo
+
+            let photo =
+                document.getElementById("photo").files[0];
+
+
+            if (photo) {
+
+                let reader = new FileReader();
+
+                reader.onload = function(event) {
+
+                    document.getElementById("cardPhoto").src =
+                        event.target.result;
+
+                };
+
+                reader.readAsDataURL(photo);
+
+            } else {
+
+                document.getElementById("cardPhoto").src =
+                    "https://placehold.co/125x125/e2e8f0/64748b?text=PHOTO";
+
+            }
+
+        }
+
+
+        // RESET
+
+        function resetCard() {
+
+            document.getElementById("name").value = "";
+
+            document.getElementById("roll").value = "";
+
+            document.getElementById("course").value = "";
+
+            document.getElementById("department").value = "";
+
+            document.getElementById("year").value = "";
+
+            document.getElementById("college").value = "";
+
+            document.getElementById("email").value = "";
+
+            document.getElementById("phone").value = "";
+
+            document.getElementById("blood").value = "";
+
+            document.getElementById("photo").value = "";
+
+
+            document.getElementById("cardName").textContent =
+                "Student Name";
+
+            document.getElementById("cardRoll").textContent =
+                "---";
+
+            document.getElementById("cardCourse").textContent =
+                "---";
+
+            document.getElementById("cardDepartment").textContent =
+                "---";
+
+            document.getElementById("cardYear").textContent =
+                "---";
+
+            document.getElementById("cardCollege").textContent =
+                "YOUR COLLEGE NAME";
+
+            document.getElementById("cardEmail").textContent =
+                "---";
+
+            document.getElementById("cardPhone").textContent =
+                "---";
+
+            document.getElementById("cardBlood").textContent =
+                "---";
+
+            document.getElementById("cardPhoto").src =
+                "https://placehold.co/125x125/e2e8f0/64748b?text=PHOTO";
+
+        }
+
+    </script>
+
+</body>
+
+</html>
